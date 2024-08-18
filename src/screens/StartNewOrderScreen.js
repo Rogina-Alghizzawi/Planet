@@ -4,17 +4,17 @@ import { Picker } from '@react-native-picker/picker';
 import CustomCheckBox from './CustomCheckBox'; 
 
 const itemsData = [
-  {id: 1, name: 'Double Nutella', quantity: 0, image: require('D:/internship/Donuts/assets/Double Nutella.jpg') },
-  {id: 2, name: 'Oreo', quantity: 0, image: require('D:/internship/Donuts/assets/Double Nutella.jpg') },
-  {id: 3, name: 'Kinder & Nutella', quantity: 0, image: require('D:/internship/Donuts/assets/Double Nutella.jpg') },
-  {id: 4, name: 'Vanilla Cake', quantity: 0, image: require('D:/internship/Donuts/assets/Double Nutella.jpg') },
-  {id: 5, name: 'Ferrero Rocher', quantity: 0, image: require('D:/internship/Donuts/assets/Double Nutella.jpg') },
-  {id: 6, name: 'Louts & Nutella', quantity: 0, image: require('D:/internship/Donuts/assets/Double Nutella.jpg') },
-  {id: 7, name: 'Boston Cream', quantity: 0, image: require('D:/internship/Donuts/assets/Double Nutella.jpg') },
-  {id: 8, name: 'Galaxy', quantity: 0, image: require('D:/internship/Donuts/assets/Double Nutella.jpg') },
-  {id: 9, name: 'Eclair Custard', quantity: 0, image: require('D:/internship/Donuts/assets/Double Nutella.jpg') },
-  {id: 10, name: 'Louts Filling', quantity: 0, image: require('D:/internship/Donuts/assets/Double Nutella.jpg') },
-  {id: 11, name: 'Pistachio', quantity: 0, image: require('D:/internship/Donuts/assets/Double Nutella.jpg') },
+  {id: 1, name: 'Double Nutella', quantity: 0, image: require('C:/Users/Rojena/Desktop/Planet/assets/Double Nutella.jpg') },
+  {id: 2, name: 'Oreo', quantity: 0, image: require('C:/Users/Rojena/Desktop/Planet/assets/Double Nutella.jpg') },
+  {id: 3, name: 'Kinder & Nutella', quantity: 0, image: require('C:/Users/Rojena/Desktop/Planet/assets/Double Nutella.jpg') },
+  {id: 4, name: 'Vanilla Cake', quantity: 0, image: require('C:/Users/Rojena/Desktop/Planet/assets/Double Nutella.jpg') },
+  {id: 5, name: 'Ferrero Rocher', quantity: 0, image: require('C:/Users/Rojena/Desktop/Planet/assets/Double Nutella.jpg') },
+  {id: 6, name: 'Louts & Nutella', quantity: 0, image: require('C:/Users/Rojena/Desktop/Planet/assets/Double Nutella.jpg') },
+  {id: 7, name: 'Boston Cream', quantity: 0, image: require('C:/Users/Rojena/Desktop/Planet/assets/Double Nutella.jpg') },
+  {id: 8, name: 'Galaxy', quantity: 0, image: require('C:/Users/Rojena/Desktop/Planet/assets/Double Nutella.jpg') },
+  {id: 9, name: 'Eclair Custard', quantity: 0, image: require('C:/Users/Rojena/Desktop/Planet/assets/Double Nutella.jpg') },
+  {id: 10, name: 'Louts Filling', quantity: 0, image: require('C:/Users/Rojena/Desktop/Planet/assets/Double Nutella.jpg') },
+  {id: 11, name: 'Pistachio', quantity: 0, image: require('C:/Users/Rojena/Desktop/Planet/assets/Double Nutella.jpg') },
 ];
 
 const StartNewOrderScreen = ({ navigation }) => {

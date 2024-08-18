@@ -78,7 +78,6 @@ const ReviewOrderScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Review Your Order</Text>
       <FlatList
         data={editedItems}
         renderItem={renderItem}

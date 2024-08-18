@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Modal, Pressable, Image, ScrollView } from 'react-native';
 
-const OrdersScreen = ({ navigation }) => { 
-  const [selectedStatus, setSelectedStatus] = useState('All'); 
+const OrdersScreen = ({ navigation }) => {
+  const [selectedStatus, setSelectedStatus] = useState('All');
   const [orders, setOrders] = useState([
     {
       id: '1',
@@ -12,6 +11,12 @@ const OrdersScreen = ({ navigation }) => {
       quantity: 10,
       note: 'Urgent order, please prioritize.',
       status: 'Pending',
+      items: [
+        'Boston Cream - 1 piece',
+        'Ferrero Rocher - 1 piece',
+        'Lotus Filling - 1 piece',
+        'Nutella Shell - 1 piece',
+      ],
     },
     {
       id: '2',
@@ -20,15 +25,19 @@ const OrdersScreen = ({ navigation }) => {
       quantity: 5,
       note: 'Regular order.',
       status: 'Delivered',
+      items: [
+        'Caramel Crunch - 2 pieces',
+        'Milk Chocolate - 3 pieces',
+      ],
     },
   ]);
 
-  const handleStatusChange = (orderId, newStatus) => {
-    setOrders((prevOrders) =>
-      prevOrders.map((order) =>
-        order.id === orderId ? { ...order, status: newStatus } : order
-      )
-    );
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+
+  const handleOrderPress = (order) => {
+    setSelectedOrder(order);
+    setModalVisible(true);
   };
 
   const filteredOrders = orders.filter(order =>
@@ -36,7 +45,7 @@ const OrdersScreen = ({ navigation }) => {
   );
 
   const renderOrderItem = ({ item }) => (
-    <View style={styles.orderItem}>
+    <TouchableOpacity onPress={() => handleOrderPress(item)} style={styles.orderItem}>
       <View style={styles.row}>
         <View style={styles.column}>
           <Text style={styles.textHeader}>Ordered On:</Text>
@@ -58,16 +67,13 @@ const OrdersScreen = ({ navigation }) => {
         </View>
       </View>
       <Text style={styles.textHeader}>Status:</Text>
-      <Picker
-        selectedValue={item.status}
+      <TouchableOpacity
         style={styles.picker}
-        onValueChange={(itemValue) => handleStatusChange(item.id, itemValue)}
+        onPress={() => handleStatusChange(item.id, item.status === 'Pending' ? 'Delivered' : 'Pending')}
       >
-        <Picker.Item label="Pending" value="Pending" />
-        <Picker.Item label="Delivered" value="Delivered" />
-        <Picker.Item label="Canceled" value="Canceled" />
-      </Picker>
-    </View>
+        <Text style={styles.pickerText}>{item.status}</Text>
+      </TouchableOpacity>
+    </TouchableOpacity>
   );
 
   return (
@@ -80,24 +86,51 @@ const OrdersScreen = ({ navigation }) => {
           <Text style={styles.buttonText}>Start New Order</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.dropdownContainer}>
-        <Picker
-          selectedValue={selectedStatus}
-          style={styles.picker}
-          onValueChange={(itemValue) => setSelectedStatus(itemValue)}
-        >
-          <Picker.Item label="All" value="All" />
-          <Picker.Item label="Pending" value="Pending" />
-          <Picker.Item label="Delivered" value="Delivered" />
-          <Picker.Item label="Canceled" value="Canceled" />
-        </Picker>
-      </View>
       <FlatList
         data={filteredOrders}
         renderItem={renderOrderItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContainer}
       />
+
+      {selectedOrder && (
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <View style={styles.modalHeaderContainer}>
+                <Text style={styles.modalHeader}>{selectedOrder.factoryPhone}</Text>
+                <Text style={styles.modalSubHeader}>{selectedOrder.orderedOn}</Text>
+                <TouchableOpacity onPress={() => setModalVisible(false)}>
+                  <Text style={styles.closeButton}>X</Text>
+                </TouchableOpacity>
+              </View>
+              <ScrollView style={styles.scrollView}>
+                <View style={styles.modalBody}>
+                  <View style={styles.promoContainer}>
+                    <Image source={require('C:/Users/Rojena/Desktop/Planet/assets/Double Nutella.jpg')} style={styles.promoImage} />
+                  </View>
+                  <View style={styles.itemsContainer}>
+                    {selectedOrder.items.map((item, index) => (
+                      <Text key={index} style={styles.itemText}>{item}</Text>
+                    ))}
+                  </View>
+                </View>
+              </ScrollView>
+              <Pressable
+                style={[styles.button, styles.modalButton]}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.buttonText}>Close</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+      )}
     </View>
   );
 };
@@ -106,7 +139,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#F4F4F4', 
+    backgroundColor: '#F4F4F4',
   },
   buttonContainer: {
     marginBottom: 20,
@@ -122,9 +155,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  dropdownContainer: {
-    marginBottom: 20,
   },
   listContainer: {
     paddingBottom: 100,
@@ -151,19 +181,86 @@ const styles = StyleSheet.create({
   },
   textHeader: {
     fontWeight: 'bold',
-    color: '#CC3399', 
+    color: '#CC3399',
     marginBottom: 4,
   },
   textValue: {
-    color: '#333366', 
+    color: '#333366',
     marginBottom: 10,
   },
   picker: {
     height: 50,
     width: '100%',
-    backgroundColor: '#FFCC00', 
+    backgroundColor: '#FFCC00',
     borderColor: '#DDD',
     borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+  },
+  pickerText: {
+    fontSize: 16,
+    color: '#333366',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    width: '90%',
+    padding: 10,
+  },
+  modalHeaderContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#DDDDDD',
+  },
+  modalHeader: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: '#CC3399',
+  },
+  modalSubHeader: {
+    fontSize: 14,
+    color: '#AAAAAA',
+  },
+  closeButton: {
+    fontSize: 18,
+    color: '#CC3399',
+  },
+  scrollView: {
+    maxHeight: 300,
+  },
+  modalBody: {
+    padding: 10,
+  },
+  promoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  promoImage: {
+    width: 100,
+    height: 100,
+    marginRight: 10,
+  },
+  itemsContainer: {
+    marginTop: 10,
+  },
+  itemText: {
+    fontSize: 16,
+    color: '#333366',
+    marginBottom: 5,
+  },
+  modalButton: {
+    marginTop: 20,
   },
 });
 
