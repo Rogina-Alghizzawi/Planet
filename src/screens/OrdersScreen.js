@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Modal, Pressable, Image, ScrollView } from 'react-native';
-
+import { Picker } from '@react-native-picker/picker';
 const OrdersScreen = ({ navigation }) => {
   const [selectedStatus, setSelectedStatus] = useState('All');
   const [orders, setOrders] = useState([
@@ -34,6 +34,14 @@ const OrdersScreen = ({ navigation }) => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
+
+  const handleStatusChange = (orderId, newStatus) => {
+    setOrders((prevOrders) =>
+      prevOrders.map((order) =>
+        order.id === orderId ? { ...order, status: newStatus } : order
+      )
+    );
+  };
 
   const handleOrderPress = (order) => {
     setSelectedOrder(order);
@@ -85,6 +93,17 @@ const OrdersScreen = ({ navigation }) => {
         >
           <Text style={styles.buttonText}>Start New Order</Text>
         </TouchableOpacity>
+      </View>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={selectedStatus}
+          style={styles.picker}
+          onValueChange={(itemValue) => setSelectedStatus(itemValue)}
+        >
+          <Picker.Item label="All" value="All" />
+          <Picker.Item label="Pending" value="Pending" />
+          <Picker.Item label="Delivered" value="Delivered" />
+        </Picker>
       </View>
       <FlatList
         data={filteredOrders}
@@ -188,6 +207,9 @@ const styles = StyleSheet.create({
     color: '#333366',
     marginBottom: 10,
   },
+  pickerContainer: {
+    marginBottom: 20,
+  },
   picker: {
     height: 50,
     width: '100%',
@@ -196,7 +218,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 10,
   },
   pickerText: {
     fontSize: 16,
